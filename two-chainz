@@ -78,7 +78,8 @@ cfgpth0="n0/desmosd/config/config.toml"
 cfgpth1="n0/bitsongd/config/config.toml"
 if [ "$(uname)" = "Linux" ]; then
   # TODO: Just index *some* specified tags, not all
-  # sed -i 's/index_keys = ""/index_keys = "tx.height,tx.hash"'
+  sed -i 's/index_all_keys = false/index_all_keys = true/g' $chainid0/$cfgpth
+  sed -i 's/index_all_keys = false/index_all_keys = true/g' $chainid1/$cfgpth
 
   # Set proper defaults and change ports
   sed -i 's/"leveldb"/"goleveldb"/g' $chainid0/$cfgpth0
@@ -95,7 +96,8 @@ if [ "$(uname)" = "Linux" ]; then
   sed -i 's/timeout_propose = "3s"/timeout_propose = "1s"/g' $chainid1/$cfgpth1
 else
   # TODO: Just index *some* specified tags, not all
-  # sed -i 's/index_keys = ""/index_keys = "tx.height,tx.hash"'
+  sed -i '' 's/index_all_keys = false/index_all_keys = true/g' $chainid0/$cfgpth
+  sed -i '' 's/index_all_keys = false/index_all_keys = true/g' $chainid1/$cfgpth
 
   # Set proper defaults and change ports
   sed -i '' 's/"leveldb"/"goleveldb"/g' $chainid0/$cfgpth0
