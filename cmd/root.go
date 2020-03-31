@@ -78,6 +78,7 @@ func init() {
 
 	// This is a bit of a cheat :shushing_face:
 	cdc = codecstd.MakeCodec(simapp.ModuleBasics)
+	RegisterCodec(cdc)
 	appCodec = codecstd.NewAppCodec(cdc)
 }
 

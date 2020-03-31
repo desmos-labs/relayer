@@ -44,6 +44,9 @@ func transactionCmd() *cobra.Command {
 		rawTransactionCmd(),
 		transferCmd(),
 		relayMsgsCmd(),
+
+		// Custom commands
+		postCmd(),
 	)
 
 	return cmd
@@ -277,7 +280,7 @@ func transferCmd() *cobra.Command {
 				return err
 			}
 
-			// MsgTransfer will call SendPacket on src chain
+			// MsgCreateSongPost will call SendPacket on src chain
 			txs := relayer.RelayMsgs{
 				Src: []sdk.Msg{c[src].PathEnd.MsgTransfer(c[dst].PathEnd, dstHeader.GetHeight(), sdk.NewCoins(amount), dstAddr, source, c[src].MustGetAddress())},
 				Dst: []sdk.Msg{},

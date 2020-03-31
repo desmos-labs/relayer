@@ -581,7 +581,7 @@ func (src *Chain) SendTransferBothSides(dst *Chain, amount sdk.Coin, dstAddr sdk
 		return err
 	}
 
-	// MsgTransfer will call SendPacket on src chain
+	// MsgCreateSongPost will call SendPacket on src chain
 	txs := RelayMsgs{
 		Src: []sdk.Msg{src.PathEnd.MsgTransfer(dst.PathEnd, dstHeader.GetHeight(), sdk.NewCoins(amount), dstAddr, source, src.MustGetAddress())},
 		Dst: []sdk.Msg{},
@@ -685,7 +685,7 @@ func (src *Chain) SendTransferMsg(dst *Chain, amount sdk.Coin, dstAddr sdk.AccAd
 		return err
 	}
 
-	// MsgTransfer will call SendPacket on src chain
+	// MsgCreateSongPost will call SendPacket on src chain
 	txs := RelayMsgs{
 		Src: []sdk.Msg{src.PathEnd.MsgTransfer(dst.PathEnd, dstHeader.GetHeight(), sdk.NewCoins(amount), dstAddr, source, src.MustGetAddress())},
 		Dst: []sdk.Msg{},
