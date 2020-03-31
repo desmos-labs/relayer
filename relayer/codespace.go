@@ -97,4 +97,7 @@ var codespaces = map[string]map[int]string{
 		20: "mempool is full",
 		21: "tx too large",
 	},
+	"undefined": {
+		111222: "undefined",
+	},
 }

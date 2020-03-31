@@ -75,14 +75,7 @@ $ rly lite init ibc1 -f
 $ tree ~/.relayer
 
 # Now you can connect the two chains with one command:
-killall desmosd 
-killall bitsongd
-echo y | ./two-chainz
-rly keys delete ibc0 testkey
-rly keys delete ibc1 testkey
-rly keys restore ibc0 testkey "$(jq -r '.secret' data/ibc0/n0/desmoscli/key_seed.json)"
-rly keys restore ibc1 testkey "$(jq -r '.secret' data/ibc1/n0/bitsongcli/key_seed.json)"
-rly tx full-path demo-path
+$ rly tx full-path demo-path
 
 # Check the token balances on both chains
 $ rly q balance ibc0

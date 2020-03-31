@@ -126,3 +126,7 @@ bitsongcli config --home $chainid1/$gclpth1 node http://localhost:26557 &> /dev/
 echo "Starting Desmos and Bitsong instances..."
 desmosd --home $GAIA_DATA/$chainid0/n0/desmosd start --pruning=nothing > $chainid0.log 2>&1 &
 bitsongd --home $GAIA_DATA/$chainid1/n0/bitsongd start --pruning=nothing > $chainid1.log 2>&1 &
+
+echo "Starting Desmos and Bitsong LCD"
+desmoscli rest-server --home $chainid0/$gclpth0 --laddr "tcp://localhost:1317" --trust-node &> $chainid0-cli.log 2>&1 &
+bitsongcli rest-server --home $chainid1/$gclpth1 --laddr "tcp://localhost:1318" --trust-node &> $chainid1-cli.log 2>&1 &
