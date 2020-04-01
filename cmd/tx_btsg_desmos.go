@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/avast/retry-go"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -13,10 +14,10 @@ import (
 
 func postCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "song-post [src-chain-id] [dst-chain-id]",
+		Use:   "song-post [src-chain-id] [dst-chain-id] [song-id]",
 		Short: "spost",
 		Long:  "This creates a new post to a Desmos-based chain",
-		Args:  cobra.ExactArgs(2),
+		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			src, dst := args[0], args[1]
 			c, err := config.Chains.Gets(src, dst)
@@ -38,9 +39,17 @@ func postCmd() *cobra.Command {
 				return err
 			}
 
+			songID := args[2]
+			creationTime := time.Now()
+
 			// MsgCreateSongPost will call SendPacket on src chain
 			txs := relayer.RelayMsgs{
-				Src: []sdk.Msg{c[src].PathEnd.MsgCreateSongPost(c[dst].PathEnd, dstHeader.GetHeight(), c[src].MustGetAddress())},
+				Src: []sdk.Msg{
+					c[src].PathEnd.MsgCreateSongPost(
+						c[dst].PathEnd, dstHeader.GetHeight(),
+						songID, creationTime, c[src].MustGetAddress(),
+					),
+				},
 				Dst: []sdk.Msg{},
 			}
 
@@ -88,8 +97,8 @@ func postCmd() *cobra.Command {
 			}
 
 			// reconstructing packet data here instead of retrieving from an indexed node
-			xferPacket := c[src].PathEnd.PostCreatePacket(
-				c[src].MustGetAddress(),
+			packet := c[src].PathEnd.PostCreatePacket(
+				songID, creationTime, c[src].MustGetAddress(),
 				dstHeader.GetHeight()+1000,
 			)
 
@@ -102,7 +111,7 @@ func postCmd() *cobra.Command {
 					c[dst].PathEnd.MsgRecvPacket(
 						c[src].PathEnd,
 						seqRecv.NextSequenceRecv,
-						xferPacket,
+						packet,
 						chanTypes.NewPacketResponse(
 							c[src].PathEnd.PortID,
 							c[src].PathEnd.ChannelID,
@@ -110,7 +119,7 @@ func postCmd() *cobra.Command {
 							c[src].PathEnd.NewPacket(
 								c[dst].PathEnd,
 								seqSend-1,
-								xferPacket,
+								packet,
 							),
 							srcCommitRes.Proof.Proof,
 							int64(srcCommitRes.ProofHeight),

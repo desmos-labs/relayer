@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	btsgtypes "github.com/bitsongofficial/go-bitsong/x/ibc_desmos"
+	btsgtypes "github.com/bitsongofficial/go-bitsong/x/ibc/desmos"
 	"github.com/cosmos/cosmos-sdk/codec"
 	dsmstypes "github.com/desmos-labs/desmos/x/posts"
 )
