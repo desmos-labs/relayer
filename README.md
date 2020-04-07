@@ -28,6 +28,8 @@ If you would like to join the relayer testnet, please [check out the instruction
 | chain | tests | supported ports |
 |-------|--------|----------------|
 | [`gaia`](https://github.com/cosmos/gaia) | ![gaia](https://github.com/iqlusioninc/relayer/workflows/TESTING%20-%20gaia%20to%20gaia%20integration/badge.svg) | `transfer` |
+| `microtick` | ![microtick](https://github.com/iqlusioninc/relayer/workflows/TESTING%20-%20mtd%20to%20ibc%20integration/badge.svg) | `transfer` |
+| [`rocketzone`](https://github.com/rocket-protocol/rocketzone) | ![rocketzone](https://github.com/iqlusioninc/relayer/workflows/TESTING%20-%20rocketzone%20to%20ibc%20integration/badge.svg) | `transfer` |
 
 ## Demoing the Relayer
 
@@ -53,13 +55,13 @@ $ cat ~/.relayer/config/config.yaml
 
 # Then add the chains and paths that you will need to work with the
 # gaia chains spun up by the two-chains script
-$ rly chains add -f demo/ibc0.json
-$ rly chains add -f demo/ibc1.json
+$ rly chains add -f configs/demo/ibc0.json
+$ rly chains add -f configs/demo/ibc1.json
 
 $ cat ~/.relayer/config/config.yaml
 
 # To finalize your config, add a path between the two chains
-$ rly paths add ibc0 ibc1 demo-path -f demo/path.json
+$ rly paths add ibc0 ibc1 demo-path -f configs/demo/path.json
 
 # Now, add the key seeds from each chain to the relayer to give it funds to work with
 $ rly keys restore ibc0 testkey "$(jq -r '.secret' data/ibc0/n0/gaiacli/key_seed.json)"

@@ -1,4 +1,4 @@
-name: TESTING - gaia to gaia integration
+name: TESTING - mtd to ibc integration
 
 on: [push]
 
@@ -29,5 +29,5 @@ jobs:
           ${{ runner.os }}-go-
     
     # run tests
-    - name: run gaia tests
-      run: TEST_DEBUG=true make test-gaia
+    - name: run mtd tests
+      run: TEST_DEBUG=true make test-mtd

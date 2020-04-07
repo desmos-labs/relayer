@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"strconv"
+	"strings"
 	"sync"
 	"testing"
 
@@ -103,7 +104,7 @@ func spinUpTestContainer(t *testing.T, rchan chan<- *dockertest.Resource, pool *
 		Cmd:          []string{c.ChainID, c.MustGetAddress().String()},
 		ExposedPorts: []string{tc.t.rpcPort},
 		PortBindings: map[dc.Port][]dc.PortBinding{
-			dc.Port(tc.t.rpcPort): []dc.PortBinding{{HostPort: c.GetRPCPort()}},
+			dc.Port(tc.t.rpcPort): {{HostPort: c.GetRPCPort()}},
 		},
 	}
 
@@ -148,4 +149,25 @@ func cleanUpTest(t *testing.T, testsDone <-chan struct{}, contDone chan<- struct
 
 	// Notify the other side that we have deleted the docker containers
 	contDone <- struct{}{}
+}
+
+// for the love of logs https://www.youtube.com/watch?v=DtsKcHmceqY
+func getLoggingChain(chns []*Chain, rsr *dockertest.Resource) *Chain {
+	for _, c := range chns {
+		if strings.Contains(rsr.Container.Name, c.ChainID) {
+			return c
+		}
+	}
+	return nil
+}
+
+func genTestPathAndSet(src, dst *Chain, srcPort, dstPort string) (*Path, error) {
+	path := GenPath(src.ChainID, dst.ChainID, srcPort, dstPort)
+	if err := src.SetPath(path.Src); err != nil {
+		return nil, err
+	}
+	if err := dst.SetPath(path.Dst); err != nil {
+		return nil, err
+	}
+	return path, nil
 }

@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	// GAIA BLOCK TIMEOUTS on jackzampolin/gaiatest:jack_relayer-testing
+	// GAIA BLOCK TIMEOUTS on jackzampolin/gaiatest:ibc-alpha
 	// timeout_commit = "1000ms"
 	// timeout_propose = "1000ms"
 	// 3 second relayer timeout works well with these block times
@@ -30,6 +30,42 @@ var (
 		gas:            200000,
 		gasPrices:      "0.025stake",
 		defaultDenom:   "stake",
+		trustingPeriod: "330h",
+	}
+
+	// MTD BLOCK TIMEOUTS on microtick/mtzonetest:ibc-alpha
+	// timeout_commit = "1000ms"
+	// timeout_propose = "1000ms"
+	// 3 second relayer timeout works well with these block times
+	mtdTestConfig = testChainConfig{
+		cdc:            codecstd.NewAppCodec(codecstd.MakeCodec(simapp.ModuleBasics)),
+		amino:          codecstd.MakeCodec(simapp.ModuleBasics),
+		dockerImage:    "microtick/mtzonetest",
+		dockerTag:      "ibc-alpha",
+		timeout:        3 * time.Second,
+		rpcPort:        "26657",
+		accountPrefix:  "cosmos",
+		gas:            200000,
+		gasPrices:      "0.025stake",
+		defaultDenom:   "stake",
+		trustingPeriod: "330h",
+	}
+
+	// RocketZone
+	// timeout_commit = "1000ms"
+	// timeout_propose = "1000ms"
+	// 3 second relayer timeout works well with these block times
+	rocketTestConfig = testChainConfig{
+		cdc:            codecstd.NewAppCodec(codecstd.MakeCodec(simapp.ModuleBasics)),
+		amino:          codecstd.MakeCodec(simapp.ModuleBasics),
+		dockerImage:    "rocketprotocol/rocketzone-relayer-test",
+		dockerTag:      "latest",
+		timeout:        3 * time.Second,
+		rpcPort:        "26657",
+		accountPrefix:  "cosmos",
+		gas:            200000,
+		gasPrices:      "0.025ufuel",
+		defaultDenom:   "ufuel",
 		trustingPeriod: "330h",
 	}
 )

@@ -8,21 +8,24 @@ import (
 )
 
 var (
-	gaiaChains = []testChain{
+	mtdChains = []testChain{
 		{"ibc0", gaiaTestConfig},
-		{"ibc1", gaiaTestConfig},
+		{"ibc1", mtdTestConfig},
 	}
 )
 
-func TestGaiaToGaiaStreamingRelayer(t *testing.T) {
-	chains := spinUpTestChains(t, gaiaChains...)
+func TestMtdToGaiaSteaming(t *testing.T) {
+	chains := spinUpTestChains(t, mtdChains...)
 
 	var (
-		src         = chains.MustGet("ibc0")
-		dst         = chains.MustGet("ibc1")
-		testDenom   = "samoleans"
-		testCoin    = sdk.NewCoin(testDenom, sdk.NewInt(1000))
-		twoTestCoin = sdk.NewCoin(testDenom, sdk.NewInt(2000))
+		src            = chains.MustGet("ibc0")
+		dst            = chains.MustGet("ibc1")
+		srcDenom       = "samoleans"
+		dstDenom       = "fox"
+		srcTestCoin    = sdk.NewCoin(srcDenom, sdk.NewInt(1000))
+		dstTestCoin    = sdk.NewCoin(dstDenom, sdk.NewInt(1000))
+		twoSrcTestCoin = sdk.NewCoin(srcDenom, sdk.NewInt(2000))
+		twoDstTestCoin = sdk.NewCoin(dstDenom, sdk.NewInt(2000))
 	)
 
 	path, err := genTestPathAndSet(src, dst, "transfer", "transfer")
@@ -43,12 +46,12 @@ func TestGaiaToGaiaStreamingRelayer(t *testing.T) {
 	testChannelPair(t, src, dst)
 
 	// send a couple of transfers to the queue on src
-	require.NoError(t, src.SendTransferMsg(dst, testCoin, dst.MustGetAddress(), true))
-	require.NoError(t, src.SendTransferMsg(dst, testCoin, dst.MustGetAddress(), true))
+	require.NoError(t, src.SendTransferMsg(dst, srcTestCoin, dst.MustGetAddress(), true))
+	require.NoError(t, src.SendTransferMsg(dst, srcTestCoin, dst.MustGetAddress(), true))
 
 	// send a couple of transfers to the queue on dst
-	require.NoError(t, dst.SendTransferMsg(src, testCoin, src.MustGetAddress(), true))
-	require.NoError(t, dst.SendTransferMsg(src, testCoin, src.MustGetAddress(), true))
+	require.NoError(t, dst.SendTransferMsg(src, dstTestCoin, src.MustGetAddress(), true))
+	require.NoError(t, dst.SendTransferMsg(src, dstTestCoin, src.MustGetAddress(), true))
 
 	// Wait for message inclusion in both chains
 	require.NoError(t, dst.WaitForNBlocks(1))
@@ -58,8 +61,8 @@ func TestGaiaToGaiaStreamingRelayer(t *testing.T) {
 	require.NoError(t, err)
 
 	// send those tokens from dst back to dst and src back to src
-	require.NoError(t, src.SendTransferMsg(dst, twoTestCoin, dst.MustGetAddress(), false))
-	require.NoError(t, dst.SendTransferMsg(src, twoTestCoin, src.MustGetAddress(), false))
+	require.NoError(t, src.SendTransferMsg(dst, twoDstTestCoin, dst.MustGetAddress(), false))
+	require.NoError(t, dst.SendTransferMsg(src, twoSrcTestCoin, src.MustGetAddress(), false))
 
 	// wait for packet processing
 	require.NoError(t, dst.WaitForNBlocks(4))
@@ -70,26 +73,26 @@ func TestGaiaToGaiaStreamingRelayer(t *testing.T) {
 	// check balance on src against expected
 	srcGot, err := src.QueryBalance(src.Key)
 	require.NoError(t, err)
-	require.Equal(t, srcExpected.AmountOf(testDenom).Int64(), srcGot.AmountOf(testDenom).Int64())
+	require.Equal(t, srcExpected.AmountOf(srcDenom).Int64(), srcGot.AmountOf(srcDenom).Int64())
 
 	// check balance on dst against expected
 	dstGot, err := dst.QueryBalance(dst.Key)
 	require.NoError(t, err)
-	require.Equal(t, dstExpected.AmountOf(testDenom).Int64(), dstGot.AmountOf(testDenom).Int64())
+	require.Equal(t, dstExpected.AmountOf(dstDenom).Int64(), dstGot.AmountOf(dstDenom).Int64())
 
 	// Test the full transfer command as well
-	require.NoError(t, src.SendTransferBothSides(dst, testCoin, dst.MustGetAddress(), true))
-	require.NoError(t, dst.SendTransferBothSides(src, testCoin, src.MustGetAddress(), false))
+	require.NoError(t, src.SendTransferBothSides(dst, srcTestCoin, dst.MustGetAddress(), true))
+	require.NoError(t, dst.SendTransferBothSides(src, srcTestCoin, src.MustGetAddress(), false))
 
 	// check balance on src against expected
 	srcGot, err = src.QueryBalance(src.Key)
 	require.NoError(t, err)
-	require.Equal(t, srcExpected.AmountOf(testDenom).Int64(), srcGot.AmountOf(testDenom).Int64())
+	require.Equal(t, srcExpected.AmountOf(srcDenom).Int64(), srcGot.AmountOf(srcDenom).Int64())
 
 	// check balance on dst against expected
 	dstGot, err = dst.QueryBalance(dst.Key)
 	require.NoError(t, err)
-	require.Equal(t, dstExpected.AmountOf(testDenom).Int64(), dstGot.AmountOf(testDenom).Int64())
+	require.Equal(t, dstExpected.AmountOf(dstDenom).Int64(), dstGot.AmountOf(dstDenom).Int64())
 
 	// TODO: Add close channel here
 	require.NoError(t, src.CloseChannel(dst, src.GetTimeout()))
