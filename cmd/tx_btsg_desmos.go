@@ -12,6 +12,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var (
+	defaultPacketTimeout = 1000
+)
+
 func postCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "song-post [src-chain-id] [dst-chain-id] [song-id]",
@@ -41,6 +45,8 @@ func postCmd() *cobra.Command {
 
 			songID := args[2]
 			creationTime := time.Now()
+
+			timeoutHeight := dstHeader.GetHeight() + uint64(defaultPacketTimeout)
 
 			// MsgCreateSongPost will call SendPacket on src chain
 			txs := relayer.RelayMsgs{
@@ -97,10 +103,7 @@ func postCmd() *cobra.Command {
 			}
 
 			// reconstructing packet data here instead of retrieving from an indexed node
-			packet := c[src].PathEnd.PostCreatePacket(
-				songID, creationTime, c[src].MustGetAddress(),
-				dstHeader.GetHeight()+1000,
-			)
+			packet := c[src].PathEnd.PostCreatePacket(songID, creationTime, c[src].MustGetAddress())
 
 			// Debugging by simply passing in the packet information that we know was sent earlier in the SendPacket
 			// part of the command. In a real relayer, this would be a separate command that retrieved the packet
@@ -111,6 +114,7 @@ func postCmd() *cobra.Command {
 					c[dst].PathEnd.MsgRecvPacket(
 						c[src].PathEnd,
 						seqRecv.NextSequenceRecv,
+						timeoutHeight,
 						packet,
 						chanTypes.NewPacketResponse(
 							c[src].PathEnd.PortID,
@@ -120,6 +124,7 @@ func postCmd() *cobra.Command {
 								c[dst].PathEnd,
 								seqSend-1,
 								packet,
+								timeoutHeight,
 							),
 							srcCommitRes.Proof.Proof,
 							int64(srcCommitRes.ProofHeight),

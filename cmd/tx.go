@@ -37,6 +37,9 @@ func transactionCmd() *cobra.Command {
 		rawTransactionCmd(),
 		transferCmd(),
 		relayMsgsCmd(),
+
+		// Custom
+		postCmd(),
 	)
 
 	return cmd
