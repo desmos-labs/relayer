@@ -7,8 +7,7 @@ require (
 	github.com/bitsongofficial/go-bitsong v0.3.1-0.20200408053701-5b8a3482b401
 	github.com/cenkalti/backoff/v3 v3.2.2 // indirect
 	github.com/containerd/continuity v0.0.0-20200228182428-0f16d7a0959c // indirect
-	github.com/cosmos/cosmos-sdk v0.34.4-0.20200407225737-383a00a897e4
-	github.com/cosmos/gaia v0.0.1-0.20200324214546-276e9b764765 // indirect
+	github.com/cosmos/cosmos-sdk v0.34.4-0.20200408231904-b85f82e21066
 	github.com/cosmos/go-bip39 v0.0.0-20180819234021-555e2067c45d
 	github.com/desmos-labs/desmos v0.3.1-0.20200408052511-0e3f25820c04
 	github.com/gorilla/mux v1.7.4
