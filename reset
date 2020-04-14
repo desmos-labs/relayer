@@ -31,4 +31,4 @@ rly lite init ibc1 -f
 sleep 5
 
 # Create the clients
-rly tx full-path demo-path --timeout 3s
+rly tx full-path demo-path --timeout 3s -d
