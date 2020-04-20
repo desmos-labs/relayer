@@ -2,6 +2,33 @@
 
 These are instructions on how to setup a node to run a basic IBC relayer testnet. Currently, coordination is happening in the [`ibc-testnet-alpha` group on telegram](https://t.me/joinchat/IYdbxRRFYIkj9FR99X3-BA).
 
+### *20 April 2020 17:00 PST* - `relayer-alpha-2` testnet
+
+This is the second `relayer` testnet! I will be copying JSON files from the first testnet to the new folder as well as merging all the backlogged pull requests. Please make sure you are using the following version of `gaia` to ensure compatability.
+
+- Gaia Version Info
+
+```bash
+$ gaiad version --long
+name: gaia
+server_name: gaiad
+client_name: gaiacli
+version: 0.0.0-303-g9a09e54
+commit: 9a09e5499c25f8bbe48f2f9abe6f74360923266b
+build_tags: netgo,ledger
+go: go version go1.14 darwin/amd64
+```
+
+- Relayer Version Info
+
+```bash
+$ rly version
+version: 0.2.0
+commit: 49e0d7316410b480236e280b0d94731adc807383
+cosmos-sdk: v0.34.4-0.20200419154345-84774907316c
+go: go1.14 darwin/amd64
+```
+
 ### *19 March 2020 17:00 PST* - `relayer-alpha` testnet
 
 This is the first `relayer` testnet! Please submit your JSON files for this testnet to `./testnets/relayer-alpha/{{chain_id}}.json`.
@@ -67,8 +94,8 @@ gaiad gentx --name validator --amount 90000000000$DENOM
 gaiad collect-gentxs
 
 # Setup the service definitions
-rly svc gaia $USER $HOME > gaiad.service
-rly svc faucet $USER $HOME $CHAINID $RLYKEY 100000$DENOM > faucet.service
+rly dev gaia $USER $HOME > gaiad.service
+rly dev faucet $USER $HOME $CHAINID $RLYKEY 100000$DENOM > faucet.service
 sudo mv gaiad.service /etc/systemd/system/gaiad.service
 sudo mv faucet.service /etc/systemd/system/faucet.service
 sudo systemctl daemon-reload
@@ -142,7 +169,12 @@ rly tst req {{dst_chain_id}}
 rly paths add {{src_chain}} {{dst_chain_id}} {{path_name}}
 
 # or generate one...
-rly pth gen {{src_chain_id}} {{dst_chain_id}} {{path_name}}
+rly pth gen {{src_chain_id}} {{src_port}} {{dst_chain_id}} {{dst_port}} {{path_name}}
+
+# or find all the existing paths...
+# NOTE: this command is still under development, but will output
+#  a number of existing paths between chains
+rly pth find
 
 # ensure that the path exists
 rly tx link {{src_chain_id}} {{dst_chain_id}}

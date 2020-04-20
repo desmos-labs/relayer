@@ -62,7 +62,7 @@ func TestGaiaToGaiaStreamingRelayer(t *testing.T) {
 	require.NoError(t, dst.SendTransferMsg(src, twoTestCoin, src.MustGetAddress(), false))
 
 	// wait for packet processing
-	require.NoError(t, dst.WaitForNBlocks(4))
+	require.NoError(t, dst.WaitForNBlocks(6))
 
 	// kill relayer routine
 	rlyDone()
@@ -90,7 +90,4 @@ func TestGaiaToGaiaStreamingRelayer(t *testing.T) {
 	dstGot, err = dst.QueryBalance(dst.Key)
 	require.NoError(t, err)
 	require.Equal(t, dstExpected.AmountOf(testDenom).Int64(), dstGot.AmountOf(testDenom).Int64())
-
-	// TODO: Add close channel here
-	require.NoError(t, src.CloseChannel(dst, src.GetTimeout()))
 }
