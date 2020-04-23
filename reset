@@ -13,7 +13,7 @@ rm -r ~/.relayer
 rm -r ./data
 
 # Re-create the chains
-echo y | ./two-chainz
+echo y | ./scripts/two-chainz
 
 # Make sure the chains are running
 sleep 3

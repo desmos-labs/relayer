@@ -16,6 +16,10 @@ var (
 	defaultPacketTimeout = 1000
 )
 
+func defaultPacketTimeoutStamp() uint64 {
+	return uint64(time.Now().Add(time.Hour * 12).UnixNano())
+}
+
 func postCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "song-post [src-chain-id] [dst-chain-id] [song-id]",
@@ -115,6 +119,7 @@ func postCmd() *cobra.Command {
 						c[src].PathEnd,
 						seqRecv.NextSequenceRecv,
 						timeoutHeight,
+						defaultPacketTimeoutStamp(),
 						packet,
 						srcCommitRes.Proof,
 						srcCommitRes.ProofHeight,
