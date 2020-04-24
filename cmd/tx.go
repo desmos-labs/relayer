@@ -47,6 +47,9 @@ func transactionCmd() *cobra.Command {
 		flags.LineBreak,
 		rawTransactionCmd(),
 		sendPacketCmd(),
+
+		// Custom commands
+		postCmd(),
 	)
 
 	return cmd
