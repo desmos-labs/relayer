@@ -23,6 +23,6 @@ func (src *PathEnd) MsgCreateSongPost(
 }
 
 // PostCreatePacket creates a new post creation packet
-func (src *PathEnd) PostCreatePacket(songID string, creationTime time.Time, sender sdk.AccAddress) []byte {
+func (src *PathEnd) PostCreatePacket(songID string, creationTime time.Time, sender string) []byte {
 	return btsgtypes.NewSongCreationData(songID, creationTime, sender).GetBytes()
 }

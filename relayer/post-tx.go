@@ -20,11 +20,6 @@ func (src *Chain) SendPostBothSides(dst *Chain, songID string) error {
 
 	timeoutHeight := dstHeader.GetHeight() + uint64(defaultPacketTimeout)
 
-	// Properly render the address string
-	done := dst.UseSDKContext()
-	srcAddr := src.MustGetAddress()
-	done()
-
 	// MsgCreateSongPost will call SendPacket on src chain
 	txs := RelayMsgs{
 		Src: []sdk.Msg{
@@ -33,7 +28,7 @@ func (src *Chain) SendPostBothSides(dst *Chain, songID string) error {
 				dstHeader.GetHeight(),
 				songID,
 				creationTime,
-				srcAddr,
+				src.MustGetAddress(),
 			),
 		},
 		Dst: []sdk.Msg{},
@@ -83,8 +78,8 @@ func (src *Chain) SendPostBothSides(dst *Chain, songID string) error {
 	}
 
 	// Properly render the source and destination address strings
-	done = dst.UseSDKContext()
-	srcAddr = src.MustGetAddress()
+	done := dst.UseSDKContext()
+	srcAddr := src.MustGetAddress().String()
 	done()
 
 	// reconstructing packet data here instead of retrieving from an indexed node
