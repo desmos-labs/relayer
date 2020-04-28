@@ -1,11 +1,10 @@
 package cmd
 
 import (
-	btsgtypes "github.com/bitsongofficial/go-bitsong/x/ibc/desmos"
 	"github.com/cosmos/cosmos-sdk/codec"
+	ibcposts "github.com/desmos-labs/desmos/x/ibc/posts"
 )
 
 func RegisterCodec(codec *codec.Codec) {
-	btsgtypes.RegisterCodec(codec)
-	//dsmstypes.RegisterCodec(codec)
+	ibcposts.RegisterCodec(codec)
 }

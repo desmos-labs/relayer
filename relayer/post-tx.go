@@ -18,7 +18,7 @@ func (src *Chain) SendPostBothSides(dst *Chain, songID string) error {
 		return err
 	}
 
-	creationTime := time.Now()
+	creationTime := time.Now().UTC()
 
 	timeoutHeight := dstHeader.GetHeight() + uint64(defaultPacketTimeout)
 
@@ -85,16 +85,11 @@ func (src *Chain) SendPostBothSides(dst *Chain, songID string) error {
 		return err
 	}
 
-	// Properly render the source and destination address strings
-	done = dst.UseSDKContext()
-	srcAddr := src.MustGetAddress().String()
-	done()
-
 	// reconstructing packet data here instead of retrieving from an indexed node
 	packet := src.PathEnd.PostCreatePacket(
 		songID,
 		creationTime,
-		srcAddr,
+		dstAddrString,
 	)
 
 	// Debugging by simply passing in the packet information that we know was sent earlier in the SendPacket
