@@ -5,7 +5,8 @@ go 1.14
 require (
 	github.com/CosmicCompass/post-chain v0.0.0-20200425063042-f936180f841c
 	github.com/avast/retry-go v2.6.0+incompatible
-	github.com/bitsongofficial/go-bitsong v0.3.1-0.20200423165548-926f412cb8ad
+	github.com/bartekn/go-bip39 v0.0.0-20171116152956-a05967ea095d // indirect
+	github.com/bitsongofficial/go-bitsong v0.3.1-0.20200428125354-44fdea656ea0
 	github.com/cenkalti/backoff/v3 v3.2.2 // indirect
 	github.com/containerd/continuity v0.0.0-20200228182428-0f16d7a0959c // indirect
 	github.com/cosmos/cosmos-sdk v0.34.4-0.20200424094124-bdcc04347c2a
@@ -25,7 +26,3 @@ require (
 )
 
 replace github.com/keybase/go-keychain => github.com/99designs/go-keychain v0.0.0-20191008050251-8e49817e8af4
-
-replace github.com/desmos-labs/desmos => /sda1/Coding/Desmos/Chain
-
-replace github.com/bitsongofficial/go-bitsong => /sda1/Coding/Bitsong
