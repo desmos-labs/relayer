@@ -10,6 +10,8 @@ import (
 	tmclient "github.com/cosmos/cosmos-sdk/x/ibc/07-tendermint/types"
 )
 
+// SendTransferBothSides sends a packet asking to create a post from src to dst.
+// The post owner will be the src address.
 func (src *Chain) SendPostBothSides(dst *Chain, songID string) error {
 	dstHeader, err := dst.UpdateLiteWithHeader()
 	if err != nil {
@@ -20,6 +22,11 @@ func (src *Chain) SendPostBothSides(dst *Chain, songID string) error {
 
 	timeoutHeight := dstHeader.GetHeight() + uint64(defaultPacketTimeout)
 
+	// Properly render the address string
+	done := dst.UseSDKContext()
+	dstAddrString := src.MustGetAddress().String()
+	done()
+
 	// MsgCreateSongPost will call SendPacket on src chain
 	txs := RelayMsgs{
 		Src: []sdk.Msg{
@@ -28,6 +35,7 @@ func (src *Chain) SendPostBothSides(dst *Chain, songID string) error {
 				dstHeader.GetHeight(),
 				songID,
 				creationTime,
+				dstAddrString,
 				src.MustGetAddress(),
 			),
 		},
@@ -78,7 +86,7 @@ func (src *Chain) SendPostBothSides(dst *Chain, songID string) error {
 	}
 
 	// Properly render the source and destination address strings
-	done := dst.UseSDKContext()
+	done = dst.UseSDKContext()
 	srcAddr := src.MustGetAddress().String()
 	done()
 
@@ -103,7 +111,7 @@ func (src *Chain) SendPostBothSides(dst *Chain, songID string) error {
 				packet,
 				srcCommitRes.Proof,
 				srcCommitRes.ProofHeight,
-				srcAddr,
+				dst.MustGetAddress(),
 			),
 		},
 		Src: []sdk.Msg{},

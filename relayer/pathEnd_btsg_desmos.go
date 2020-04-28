@@ -9,7 +9,7 @@ import (
 
 // MsgCreateSongPost creates a new transfer message
 func (src *PathEnd) MsgCreateSongPost(
-	dst *PathEnd, dstHeight uint64, songID string, creationTime time.Time, signer sdk.AccAddress,
+	dst *PathEnd, dstHeight uint64, songID string, creationTime time.Time, postCreator string, signer sdk.AccAddress,
 ) sdk.Msg {
 	return btsgtypes.NewMsgCreateSongPost(
 		src.PortID,
@@ -18,6 +18,8 @@ func (src *PathEnd) MsgCreateSongPost(
 
 		songID,
 		creationTime,
+		postCreator,
+
 		signer,
 	)
 }

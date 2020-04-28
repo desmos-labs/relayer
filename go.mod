@@ -24,3 +24,7 @@ require (
 )
 
 replace github.com/keybase/go-keychain => github.com/99designs/go-keychain v0.0.0-20191008050251-8e49817e8af4
+
+replace github.com/desmos-labs/desmos => /sda1/Coding/Desmos/Chain
+
+replace github.com/bitsongofficial/go-bitsong => /sda1/Coding/Bitsong
