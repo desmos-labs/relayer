@@ -3,6 +3,7 @@ module github.com/iqlusioninc/relayer
 go 1.14
 
 require (
+	github.com/CosmicCompass/post-chain v0.0.0-20200425063042-f936180f841c
 	github.com/avast/retry-go v2.6.0+incompatible
 	github.com/bitsongofficial/go-bitsong v0.3.1-0.20200423165548-926f412cb8ad
 	github.com/cenkalti/backoff/v3 v3.2.2 // indirect
