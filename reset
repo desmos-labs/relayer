@@ -31,4 +31,5 @@ rly lite init ibc1 -f
 sleep 5
 
 # Create the clients
-rly tx link demo --timeout 3s -d
+rly tx link transfer --timeout 3s -d
+rly tx link posts --timeout 3s -d
